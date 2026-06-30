@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "126638947175",
+    "project_id": "easysit-ea247",
+    "storage_bucket": "easysit-ea247.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:126638947175:android:b8e46823abf8e18aee0dc2",
+        "android_client_info": {
+          "package_name": "com.example.easy_sit1212"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD4t9x7CxPrXg2ua0SinkO4KBADq74mnEI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
