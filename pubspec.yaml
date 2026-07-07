@@ -40,12 +40,12 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
 
-  # QR & PDF packages (QR Code Generate කිරීමට සහ PDF එකට Image එකතු කිරීමට)
+  
   pdf: ^3.11.0
   printing: ^5.14.3
-  image: ^4.5.0          # 👈 මෙය එකතු කරන්න - QR Code Image Generation සඳහා
+  image: ^4.5.0         
   qr: ^3.0.0
-  share_plus: ^7.2.1     # 👈 මෙය එකතු කරන්න - PDF Share/Save කිරීමට
+  share_plus: ^7.2.1     
   mobile_scanner: ^7.2.0
   flutter_local_notifications: ^18.0.0
   timezone: ^0.9.4
@@ -62,6 +62,7 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^5.0.0
+  flutter_launcher_icons: ^0.14.4
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -103,3 +104,8 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/logo.png"
