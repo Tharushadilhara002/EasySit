@@ -572,7 +572,53 @@ class _QrScannerScreenState extends State<QrScannerScreen> {
       ),
       body: Stack(
         children: [
-          MobileScanner(controller: _controller, onDetect: _onDetect),
+          MobileScanner(
+            controller: _controller,
+            onDetect: _onDetect,
+            errorBuilder: (context, error) {
+              String errorMessage;
+              switch (error.errorCode) {
+                case MobileScannerErrorCode.permissionDenied:
+                  errorMessage = 'Please grant camera permission in your device settings to scan QR codes.';
+                  break;
+                case MobileScannerErrorCode.unsupported:
+                  errorMessage = 'This device does not support camera scanning.';
+                  break;
+                default:
+                  errorMessage = 'Camera error: ${error.errorDetails?.message ?? error.errorCode.name}';
+              }
+              
+              return Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(24.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(24),
+                        decoration: BoxDecoration(
+                          color: Colors.red.shade50,
+                          shape: BoxShape.circle,
+                        ),
+                        child: Icon(Icons.camera_alt_outlined, size: 64, color: Colors.red.shade400),
+                      ),
+                      const SizedBox(height: 24),
+                      const Text(
+                        'Camera Access Needed',
+                        style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Color(0xFF1A237E)),
+                      ),
+                      const SizedBox(height: 12),
+                      Text(
+                        errorMessage,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 16, color: Colors.grey.shade600),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          ),
           if (_isProcessing)
             Container(
               color: Colors.black54,
