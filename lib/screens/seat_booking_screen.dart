@@ -199,35 +199,61 @@ class _SeatBookingScreenState extends State<SeatBookingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFFF5F7FA),
       appBar: AppBar(
-        title: Text(widget.roomName),
-        backgroundColor: Colors.blue,
+        toolbarHeight: 85,
+        elevation: 0,
+        backgroundColor: Colors.transparent,
         foregroundColor: Colors.white,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.qr_code_scanner),
-            tooltip: 'Scan QR',
-            onPressed: _goScan,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+            bottom: Radius.circular(30),
           ),
-        ],
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(30),
-          child: Padding(
-            padding: const EdgeInsets.only(bottom: 8),
-            child: Text(
-              '${widget.buildingName} • ${widget.floorName}',
-              style: const TextStyle(fontSize: 14, color: Colors.white70),
+        ),
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            borderRadius: BorderRadius.vertical(
+              bottom: Radius.circular(30),
+            ),
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [Color(0xFF1A237E), Color(0xFF3949AB)],
             ),
           ),
         ),
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              widget.roomName,
+              style: const TextStyle(fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              '${widget.buildingName} • ${widget.floorName}',
+              style: const TextStyle(fontSize: 13, color: Colors.white70, fontWeight: FontWeight.normal),
+            ),
+          ],
+        ),
+        actions: [
+          Container(
+            margin: const EdgeInsets.only(right: 16),
+            decoration: BoxDecoration(
+              color: Colors.white.withValues(alpha: 0.2),
+              shape: BoxShape.circle,
+            ),
+            child: IconButton(
+              icon: const Icon(Icons.qr_code_scanner, color: Colors.white),
+              tooltip: 'Scan QR',
+              onPressed: _goScan,
+            ),
+          ),
+        ],
       ),
       body: Container(
         decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [Color(0xFFF5F7FA), Colors.white],
-          ),
+          color: Color(0xFFF5F7FA),
         ),
         child: StreamBuilder<QuerySnapshot>(
         stream: _firestore
@@ -242,15 +268,34 @@ class _SeatBookingScreenState extends State<SeatBookingScreen> {
             return Center(child: Text('Error: ${snapshot.error}'));
           }
           if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-            return const Center(
+            return Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.event_seat, size: 64, color: Colors.grey),
-                  SizedBox(height: 16),
-                  Text(
-                    'No seats available in this room',
-                    style: TextStyle(fontSize: 18, color: Colors.grey),
+                  Container(
+                    padding: const EdgeInsets.all(24),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.05),
+                          blurRadius: 20,
+                          offset: const Offset(0, 10),
+                        ),
+                      ],
+                    ),
+                    child: const Icon(Icons.chair_alt_rounded, size: 72, color: Color(0xFF3949AB)),
+                  ),
+                  const SizedBox(height: 24),
+                  const Text(
+                    'No seats available',
+                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Color(0xFF1A237E)),
+                  ),
+                  const SizedBox(height: 8),
+                  const Text(
+                    'Try checking another room',
+                    style: TextStyle(fontSize: 16, color: Colors.grey),
                   ),
                 ],
               ),
@@ -269,16 +314,29 @@ class _SeatBookingScreenState extends State<SeatBookingScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  children: [
-                    _legendItem(Colors.green.shade600, 'Available'),
-                    const SizedBox(width: 12),
-                    _legendItem(Colors.amber.shade600, 'Pending'),
-                    const SizedBox(width: 12),
-                    _legendItem(Colors.red.shade600, 'Booked'),
-                  ],
+                Container(
+                  padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(16),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.03),
+                        blurRadius: 10,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      _legendItem(Colors.green.shade600, 'Available'),
+                      _legendItem(Colors.amber.shade600, 'Pending'),
+                      _legendItem(Colors.red.shade600, 'Booked'),
+                    ],
+                  ),
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 20),
                 Expanded(
                   child: GridView.builder(
                     gridDelegate:
@@ -333,15 +391,16 @@ class _SeatBookingScreenState extends State<SeatBookingScreen> {
                         onTap: onTap,
                         child: AnimatedContainer(
                           duration: const Duration(milliseconds: 200),
+                          curve: Curves.easeInOut,
                           decoration: BoxDecoration(
                             color: bgColor,
-                            borderRadius: BorderRadius.circular(14),
+                            borderRadius: BorderRadius.circular(16),
                             border: Border.all(color: borderColor, width: 2.5),
                             boxShadow: [
                               BoxShadow(
-                                color: borderColor.withValues(alpha: 0.15),
-                                blurRadius: 6,
-                                offset: const Offset(0, 2),
+                                color: borderColor.withValues(alpha: 0.2),
+                                blurRadius: 8,
+                                offset: const Offset(0, 4),
                               ),
                             ],
                           ),
@@ -349,30 +408,42 @@ class _SeatBookingScreenState extends State<SeatBookingScreen> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Icon(
-                                isMine ? Icons.person : Icons.event_seat,
-                                size: 26,
+                                isMine ? Icons.person : Icons.chair_alt_rounded,
+                                size: 32,
                                 color: iconColor,
                               ),
-                              const SizedBox(height: 6),
-                              Text(
-                                seatNumber,
-                                style: TextStyle(
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.bold,
-                                  color: textColor,
+                              const SizedBox(height: 8),
+                              Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                                decoration: BoxDecoration(
+                                  color: Colors.white.withValues(alpha: 0.6),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Text(
+                                  seatNumber,
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w800,
+                                    color: textColor,
+                                  ),
                                 ),
                               ),
                               if (isMine && status == 'pending')
                                 Container(
-                                  margin: const EdgeInsets.only(top: 4),
-                                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                                  margin: const EdgeInsets.only(top: 6),
+                                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                                   decoration: BoxDecoration(
                                     color: Colors.amber.shade100,
-                                    borderRadius: BorderRadius.circular(6),
+                                    borderRadius: BorderRadius.circular(8),
+                                    border: Border.all(color: Colors.amber.shade300),
                                   ),
                                   child: Text(
                                     'Mine',
-                                    style: TextStyle(fontSize: 8, color: Colors.amber.shade800),
+                                    style: TextStyle(
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.amber.shade800,
+                                    ),
                                   ),
                                 ),
                             ],
@@ -397,18 +468,33 @@ class _SeatBookingScreenState extends State<SeatBookingScreen> {
 
   Widget _legendItem(Color color, String label) {
     return Row(
+      mainAxisSize: MainAxisSize.min,
       children: [
         Container(
-          width: 14,
-          height: 14,
+          width: 16,
+          height: 16,
           decoration: BoxDecoration(
             color: color.withValues(alpha: 0.15),
-            borderRadius: BorderRadius.circular(3),
+            borderRadius: BorderRadius.circular(6),
             border: Border.all(color: color, width: 2),
+            boxShadow: [
+              BoxShadow(
+                color: color.withValues(alpha: 0.2),
+                blurRadius: 4,
+                offset: const Offset(0, 2),
+              ),
+            ],
           ),
         ),
-        const SizedBox(width: 4),
-        Text(label, style: TextStyle(fontSize: 12, color: color)),
+        const SizedBox(width: 8),
+        Text(
+          label,
+          style: TextStyle(
+            fontSize: 13,
+            fontWeight: FontWeight.w600,
+            color: Colors.grey.shade800,
+          ),
+        ),
       ],
     );
   }
